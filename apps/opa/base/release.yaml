@@ -10,5 +10,5 @@ spec:
       chart: ./iac/helm/opa-chart
       sourceRef:
         kind: GitRepository
-        name: flux-config
+        name: opa
   interval: 1m
