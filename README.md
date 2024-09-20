@@ -56,44 +56,34 @@ az extension add -n k8s-extension
     NAMESPACE=opa-gitops
     ```
 
-1. Run the following command to initialize the flux system in the AKS cluster:
-    ```bash
-    ```
-
-
- specify application git url and branch:
+1. Run the following command to initialize the flux system and configuration in the AKS cluster:
 
     ```
-    GIT_URL=https://github.com/yortch/opa-demo
-    BRANCH=gitops-aks
-    az k8s-configuration flux create --resource-group $RG \
-    --cluster-name $CLUSTER --cluster-type managedClusters \
-    --name flux-config --scope cluster --namespace flux-system \
-    --kind git --url=$GIT_URL \
-    --branch $BRANCH --kustomization name=my-kustomization
-
     GIT_URL=https://github.com/yortch/aks-gitops
     BRANCH=main
     az k8s-configuration flux create --resource-group $RG \
     --cluster-name $CLUSTER --cluster-type managedClusters \
     --name flux-config --scope cluster --namespace flux-system \
-    --kind git --url=$GIT_URL interval=1m \
+    --kind git --url=$GIT_URL --interval=1m \
     --branch $BRANCH --kustomization name=opa-kustomize path=./apps/opa/base interval=1m
-
-    az k8s-configuration flux update --resource-group $RG \
-    --cluster-name $CLUSTER --cluster-type managedClusters \
-    --name flux-config \ 
-    --url $GIT_URL \
-    --kustomization name=opa-kustomize path=./apps/opa/base interval=1m
     ```
 
+## Appendix
+
+### Flux commands
+
+Export yaml for `GitRepository`:
+
+```bash
   flux create source git opa \
     --url=https://github.com/yortch/opa-demo \
     --branch=gitops-aks \
     --export
+```
 
+Export yaml for `HelmRelease`:
 
-
+```bash
 flux create helmrelease opa-gitops \
   --source GitRepository/opa-chart
   -- "https://github.com/yortch/opa-demo" \
@@ -102,3 +92,4 @@ flux create helmrelease opa-gitops \
   --namespace $NAMESPACE \
   --branch gitops-aks \
   --export
+```
