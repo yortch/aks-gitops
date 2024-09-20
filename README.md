@@ -70,7 +70,16 @@ az extension add -n k8s-extension
     --cluster-name $CLUSTER --cluster-type managedClusters \
     --name flux-config --scope cluster --namespace flux-system \
     --kind git --url=$GIT_URL \
-    --branch $BRANCH
+    --branch $BRANCH --kustomization name=my-kustomization
+
+    GIT_URL=https://github.com/yortch/aks-gitops
+    BRANCH=main
+    az k8s-configuration flux create --resource-group $RG \
+    --cluster-name $CLUSTER --cluster-type managedClusters \
+    --name flux-config --scope cluster --namespace flux-system \
+    --kind git --url=$GIT_URL \
+    --branch $BRANCH --kustomization name=opa-kustomize path=./apps/opa/base
+
     ```
 
   flux create source git opa \
