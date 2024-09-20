@@ -77,9 +77,14 @@ az extension add -n k8s-extension
     az k8s-configuration flux create --resource-group $RG \
     --cluster-name $CLUSTER --cluster-type managedClusters \
     --name flux-config --scope cluster --namespace flux-system \
-    --kind git --url=$GIT_URL \
-    --branch $BRANCH --kustomization name=opa-kustomize path=./apps/opa/base
+    --kind git --url=$GIT_URL interval=1m \
+    --branch $BRANCH --kustomization name=opa-kustomize path=./apps/opa/base interval=1m
 
+    az k8s-configuration flux update --resource-group $RG \
+    --cluster-name $CLUSTER --cluster-type managedClusters \
+    --name flux-config \ 
+    --url $GIT_URL \
+    --kustomization name=opa-kustomize path=./apps/opa/base interval=1m
     ```
 
   flux create source git opa \
