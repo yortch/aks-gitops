@@ -48,48 +48,47 @@ az extension add -n k8s-configuration
 az extension add -n k8s-extension
 ```
 
+Install flux extension: 
+
+```bash
+az k8s-extension create -g $RG -c $CLUSTER -n flux-system \
+--extension-type microsoft.flux -t managedClusters
+```
+
 ## Deploy your Gitops (Flux) application
 
-1. Export project name to use:
+1. Export variablesto use:
 
     ```bash
-    NAMESPACE=opa-gitops
+    GIT_URL=https://github.com/yortch/aks-gitops
+    BRANCH=main
     ```
 
 1. Run the following command to initialize the flux system and configuration in the AKS cluster:
 
     ```
-    GIT_URL=https://github.com/yortch/aks-gitops
-    BRANCH=main
     az k8s-configuration flux create --resource-group $RG \
     --cluster-name $CLUSTER --cluster-type managedClusters \
-    --name opa-config --scope cluster --namespace flux-system \
-    --kind git --url=$GIT_URL --interval=1m --branch $BRANCH \
-    --kustomization name=opa-kustomize path=./apps/opa/base interval=1m prune=true
+    --name opa-config --scope namespace --namespace opa \
+    --kind git --url=$GIT_URL --interval=1m --timeout=2m \
+    --branch $BRANCH --kustomization name=opa-kustomize \
+    path=./apps/opa/base interval=1m timeout=2m prune=true
     ```
 
-## Appendix
+1. The `kustomization` above creates a `HelmRelease` using helm chart from `GitRepository` (https://github.com/yortch/opa-demo) which creates artifacts in the namespace `opa`. To validate application, run the following command to get the external IP:
 
-### Flux commands
+   ```bash
+   kubectl get service opa -n opa
+   ```
 
-Export yaml for `GitRepository`:
+1. Copy the `EXTERNAL_IP` value and navigate to `http://{EXTERNAL_IP}:8181` in a browser.
 
-```bash
-  flux create source git opa \
-    --url=https://github.com/yortch/opa-demo \
-    --branch=gitops-aks \
-    --export
+## Install Weave Gitops console for Flux (optional)
+
 ```
-
-Export yaml for `HelmRelease`:
-
-```bash
-flux create helmrelease opa-gitops \
-  --source GitRepository/opa-chart
-  -- "https://github.com/yortch/opa-demo" \
-  --chart ./iac/helm/opa-chart \
-  --values ./iac/helm/opa-chart/values/dev/values.yaml \
-  --namespace $NAMESPACE \
-  --branch gitops-aks \
-  --export
+flux create helmrelease ww-gitops \
+  --source=HelmRepository/ww-gitops \
+  --chart=weave-gitops \
+  --values=./weave-gitops-values.yaml \
+  --export > ./clusters/workshop/weave-gitops-helmrelease.yaml
 ```
