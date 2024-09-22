@@ -85,10 +85,11 @@ az k8s-extension create -g $RG -c $CLUSTER -n flux-system \
 
 ## Install Weave Gitops console for Flux (optional)
 
-```
-flux create helmrelease ww-gitops \
-  --source=HelmRepository/ww-gitops \
-  --chart=weave-gitops \
-  --values=./weave-gitops-values.yaml \
-  --export > ./clusters/workshop/weave-gitops-helmrelease.yaml
-```
+    ```bash
+    az k8s-configuration flux create --resource-group $RG \
+    --cluster-name $CLUSTER --cluster-type managedClusters \
+    --name weave-gitops-config --scope cluster --namespace weave-gitops \
+    --kind git --url=$GIT_URL --interval=1m --timeout=2m \
+    --branch $BRANCH --kustomization name=weave-gitops-kustomize \
+    path=./apps/weave-gitops interval=1m timeout=2m prune=true
+    ```

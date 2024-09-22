@@ -7,7 +7,7 @@ spec:
   releaseName: weave-gitops
   chart:
     spec:
-      chart: ./charts-gitops-server
+      chart: ./charts/gitops-server
       reconcileStrategy: Revision
       sourceRef:
         kind: GitRepository
