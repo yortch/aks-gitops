@@ -83,13 +83,3 @@ az k8s-extension create -g $RG -c $CLUSTER -n flux-system \
 
 1. Copy the `EXTERNAL_IP` value and navigate to `http://{EXTERNAL_IP}:8181` in a browser.
 
-## Install Weave Gitops console for Flux (optional)
-
-    ```bash
-    az k8s-configuration flux create --resource-group $RG \
-    --cluster-name $CLUSTER --cluster-type managedClusters \
-    --name weave-gitops-config --scope cluster --namespace weave-gitops \
-    --kind git --url=$GIT_URL --interval=1m --timeout=2m \
-    --branch $BRANCH --kustomization name=weave-gitops-kustomize \
-    path=./apps/weave-gitops interval=1m timeout=2m prune=true
-    ```
