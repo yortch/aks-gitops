@@ -12,3 +12,6 @@ spec:
         kind: GitRepository
         name: opa
   interval: 1m
+  valuesFromFiles:
+    - ./iac/helm/values/dev/values.yaml
+
