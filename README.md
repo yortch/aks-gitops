@@ -83,3 +83,13 @@ az k8s-extension create -g $RG -c $CLUSTER -n flux-system \
 
 1. Copy the `EXTERNAL_IP` value and navigate to `http://{EXTERNAL_IP}:8181` in a browser.
 
+### Add additional kustomizations to existing flux config
+
+Use the following command to add a dev `kustomization` to the existing `opa-config` flux config:
+
+    ```bash
+    az k8s-configuration flux kustomization create --resource-group $RG \
+        --cluster-name $cluster --cluster-type connectedClusters --name opa-config \
+        --kustomization-name opa-kustomize-dev --path ./apps/opa/dev \
+        --prune --force --interval 1m --timeout 2m
+    ```
