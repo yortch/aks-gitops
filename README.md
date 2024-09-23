@@ -72,7 +72,7 @@ az k8s-extension create -g $RG -c $CLUSTER -n flux-system \
     --name opa-config --scope namespace --namespace opa \
     --kind git --url=$GIT_URL --interval=1m --timeout=2m \
     --branch $BRANCH --kustomization name=opa-kustomize \
-    path=./apps/opa/base interval=1m timeout=2m prune=true
+    path=./apps/opa/base interval=1m timeout=2m prune=true force=true
     ```
 
 1. The `kustomization` above creates a `HelmRelease` using helm chart from `GitRepository` (https://github.com/yortch/opa-demo) which creates artifacts in the namespace `opa`. To validate application, run the following command to get the external IP:
@@ -85,11 +85,13 @@ az k8s-extension create -g $RG -c $CLUSTER -n flux-system \
 
 ### Add additional kustomizations to existing flux config
 
-Use the following command to add a dev `kustomization` to the existing `opa-config` flux config:
+Use the following command to add a dev flux config:
 
     ```bash
-    az k8s-configuration flux kustomization create --resource-group $RG \
-        --cluster-name $cluster --cluster-type connectedClusters --name opa-config \
-        --kustomization-name opa-kustomize-dev --path ./apps/opa/dev \
-        --prune --force --interval 1m --timeout 2m
+    az k8s-configuration flux create --resource-group $RG \
+    --cluster-name $CLUSTER --cluster-type managedClusters \
+    --name opa-dev-config --scope namespace --namespace opa-dev \
+    --kind git --url=$GIT_URL --interval=1m --timeout=2m \
+    --branch $BRANCH --kustomization name=opa-dev-kustomize \
+    path=./apps/opa/dev interval=1m timeout=2m prune=true force=true retry-interval=1m
     ```
