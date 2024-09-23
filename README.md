@@ -83,7 +83,7 @@ az k8s-extension create -g $RG -c $CLUSTER -n flux-system \
 
 1. Copy the `EXTERNAL_IP` value and navigate to `http://{EXTERNAL_IP}:8181` in a browser.
 
-### Add additional kustomizations to existing flux config
+### Add additional environment deployments
 
 Use the following command to add a dev flux config:
 
