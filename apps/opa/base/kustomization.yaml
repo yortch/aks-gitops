@@ -6,3 +6,4 @@ resources:
   - release.yaml
   - app2-repository.yaml
   - app2-release.yaml
+  - opa2-release.yaml

@@ -1,0 +1,16 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: opa2
+  namespace: opa
+spec:
+  releaseName: opa2
+  chart:
+    spec:
+      chart: ./iac/helm/opa-chart
+      reconcileStrategy: Revision
+      sourceRef:
+        kind: GitRepository
+        name: opa
+  interval: 1m
+
