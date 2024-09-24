@@ -1,16 +1,16 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: app2
+  name: app3
   namespace: opa
 spec:
-  releaseName: app2
+  releaseName: app3
   chart:
     spec:
       chart: ./demo-chart
       reconcileStrategy: Revision
       sourceRef:
         kind: GitRepository
-        name: app2
+        name: app3
   interval: 1m
 

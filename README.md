@@ -104,6 +104,6 @@ by adding a new `kustomization` resource:
     ```bash
     az k8s-configuration flux kustomization create --resource-group $RG \
     --cluster-name $CLUSTER --cluster-type managedClusters --name opa-config \
-    --kustomization-name app2-kustomize --path ./apps/app2 \
+    --kustomization-name app3-kustomize --path ./apps/app3 \
     --prune true --force true --interval 1m --timeout 2m --retry-interval 30s
     ```
