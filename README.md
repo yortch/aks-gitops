@@ -95,3 +95,15 @@ Use the following command to add a dev flux config:
     --branch $BRANCH --kustomization name=opa-dev-kustomize \
     path=./apps/opa/dev interval=1m timeout=2m prune=true force=true retry-interval=1m
     ```
+
+### Add second deployment on the same namespace
+
+This shows how to add a new deployment using a separate helm chart on the same namespace
+by adding a new `kustomization` resource:
+
+    ```bash
+    az k8s-configuration flux kustomization create --resource-group $RG \
+    --cluster-name $CLUSTER --cluster-type managedClusters --name opa-config \
+    --kustomization-name app2-kustomize --path ./apps/app2 \
+    --prune true --force true --interval 1m --timeout 2m --retry-interval 30s
+    ```

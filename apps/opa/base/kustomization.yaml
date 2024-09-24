@@ -4,3 +4,5 @@ namespace: opa
 resources:
   - repository.yaml
   - release.yaml
+  - app2-repository.yaml
+  - app2-release.yaml
